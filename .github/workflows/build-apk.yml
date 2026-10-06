@@ -1,0 +1,56 @@
+name: 自动编译并生成安卓APK (Build Android APK)
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-apk:
+    name: 编译打包 APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 检出仓库代码 (Checkout Repository)
+        uses: actions/checkout@v4
+
+      - name: 配置 Node.js 环境 (Setup Node.js)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: 安装项目依赖 (Install Dependencies)
+        run: npm install
+
+      - name: 编译生产前端工程 (Build Web Assets)
+        run: npm run build
+
+      - name: 配置 Java JDK 17 (Setup Java JDK)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: 配置 Android SDK 环境 (Setup Android SDK)
+        uses: android-actions/setup-android@v3
+
+      - name: 初始化跨平台 Capacitor 并构建 Android 工程
+        run: |
+          npm install @capacitor/core @capacitor/cli @capacitor/android
+          npx cap init "约在一起" "com.yuezaiyiqi.app" --web-dir dist
+          npx cap add android
+          npx cap sync android
+
+      - name: 执行 Gradle 编译安卓 APK (Build Debug APK)
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      - name: 上传 APK 安装包至 GitHub 产物 (Upload APK Artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: 约在一起-debug.apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30

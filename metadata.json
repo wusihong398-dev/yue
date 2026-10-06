@@ -1,0 +1,6 @@
+{
+  "name": "约在一起",
+  "description": "专业的同城与全国交友约会平台，支持附近、同城、老乡跨省筛选、真人实名认证、微信号解锁与活动约会。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
