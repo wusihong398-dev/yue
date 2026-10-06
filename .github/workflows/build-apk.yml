@@ -14,10 +14,10 @@ jobs:
       - name: 检出仓库代码 (Checkout Repository)
         uses: actions/checkout@v4
 
-      - name: 配置 Node.js 环境 (Setup Node.js)
+      - name: 配置 Node.js 22 LTS 环境 (Setup Node.js 22)
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: 配置 Java JDK 21 (Setup Java JDK)
         uses: actions/setup-java@v4
@@ -35,10 +35,8 @@ jobs:
         run: |
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
-      - name: 初始化 Capacitor 并同步 Android 原生工程
+      - name: 同步 Capacitor 原生工程 (Sync Capacitor Android)
         run: |
-          npm install --legacy-peer-deps @capacitor/core @capacitor/cli @capacitor/android
-          npx cap add android || true
           npx cap sync android
 
       - name: 执行 Gradle 编译安卓 APK (Build Debug APK)
