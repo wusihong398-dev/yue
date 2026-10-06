@@ -1,0 +1,8 @@
+{
+  "appId": "com.yuezaiyiqi.app",
+  "appName": "约在一起",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  }
+}

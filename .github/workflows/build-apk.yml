@@ -18,10 +18,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
 
       - name: 安装项目依赖 (Install Dependencies)
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: 编译生产前端工程 (Build Web Assets)
         run: npm run build
@@ -37,9 +36,8 @@ jobs:
 
       - name: 初始化跨平台 Capacitor 并构建 Android 工程
         run: |
-          npm install @capacitor/core @capacitor/cli @capacitor/android
-          npx cap init "约在一起" "com.yuezaiyiqi.app" --web-dir dist
-          npx cap add android
+          npm install --legacy-peer-deps @capacitor/core @capacitor/cli @capacitor/android
+          npx cap add android || true
           npx cap sync android
 
       - name: 执行 Gradle 编译安卓 APK (Build Debug APK)
